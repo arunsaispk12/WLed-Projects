@@ -1,0 +1,92 @@
+# WLED Workspace .gitignore
+
+# Build artifacts
+.pio/
+.pioenvs/
+.piolibdeps/
+build/
+*.o
+*.elf
+*.bin
+*.hex
+
+# IDE files
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Secrets and credentials
+secrets.h
+credentials.h
+secrets.json
+wled_prefs.json
+wled_prefs.tmp
+cfg.json
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+.~*
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# KiCad
+*.bak
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*-backups/
+*-cache.lib
+*-rescue.lib
+fp-info-cache
+
+# Eagle
+*.b#*
+*.s#*
+*.l#*
+
+# Manufacturing files (optional - uncomment if you don't want to commit)
+# gerbers/
+# *.gbr
+# *.drl
+
+# Personal notes (optional)
+# notes/
+# personal/
+
+# Node modules (if using any JS tools)
+node_modules/
+
+# Compiled documentation
+site/
+
+# Test outputs
+test/output/
+*.test
+
+# Backup files
+backup/
+*.backup
