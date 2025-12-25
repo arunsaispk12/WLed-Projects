@@ -55,12 +55,23 @@ See `integrations/rainmaker/` for the complete guide on integrating WLED with ES
 ## Documentation
 
 ### Essential Guides
+
+**Getting Started:**
 - [Quick Start Guide](QUICK_START.md) - Get started quickly
 - [Build System Guide](BUILD_SYSTEM.md) - Multi-configuration build system
-- [WLED-Rainmaker Integration Guide](integrations/rainmaker/INTEGRATION_GUIDE.md)
-- [Hardware Development Guide](docs/guides/HARDWARE_GUIDE.md)
-- [Project Setup Guide](docs/guides/PROJECT_SETUP.md)
-- [Troubleshooting Guide](docs/troubleshooting/COMMON_ISSUES.md)
+- [Project Setup Guide](docs/guides/PROJECT_SETUP.md) - Organize your projects
+
+**Hardware & Components:**
+- [Wire Selection Guide](docs/guides/WIRE_SELECTION_GUIDE.md) - Choose the right wire for your project
+- [LED Type Selection Guide](docs/guides/LED_SELECTION_GUIDE.md) - Compare and select LED types
+- [Hardware Development Guide](docs/guides/HARDWARE_GUIDE.md) - Design custom controllers
+
+**Integration & Advanced:**
+- [WLED-Rainmaker Integration Guide](integrations/rainmaker/INTEGRATION_GUIDE.md) - Cloud connectivity
+- [Reliability & Maintenance](docs/guides/RELIABILITY_MAINTENANCE.md) - Long-term operation
+
+**Troubleshooting:**
+- [Common Issues Guide](docs/troubleshooting/COMMON_ISSUES.md) - Solve problems quickly
 
 ### Resources
 - [WLED Official Documentation](https://kno.wled.ge/)
