@@ -1,0 +1,67 @@
+# GitHub Pages Configuration
+
+# Site settings
+title: "WLED Projects & Hardware Development"
+description: "Comprehensive workspace for WLED controller projects, custom hardware development, and ESP RainMaker integration"
+author: "arunsaispk12"
+baseurl: "/WLed-Projects"
+url: "https://arunsaispk12.github.io"
+
+# Build settings
+markdown: kramdown
+theme: jekyll-theme-cayman
+
+# Kramdown settings
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
+
+# Exclude files from build
+exclude:
+  - .git
+  - .gitignore
+  - README.md
+  - vendor
+  - .pio
+  - build
+
+# Include files
+include:
+  - _*
+
+# Plugins
+plugins:
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
+  - jekyll-titles-from-headings
+
+# Plugin settings
+relative_links:
+  enabled: true
+  collections: true
+
+optional_front_matter:
+  remove_originals: false
+
+titles_from_headings:
+  enabled: true
+  strip_title: true
+  collections: true
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:path/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "docs"
+    values:
+      layout: "default"
