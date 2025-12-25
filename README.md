@@ -139,20 +139,41 @@ cd projects/wled-controllers/sound-reactive-controller
 ./build.sh flash sound_reactive /dev/ttyUSB0
 ```
 
-### 3. Moon/Ambient Lighting 🚧
+### 3. Moon/Ambient Lighting ✅
 **Location:** `projects/wled-controllers/moon-ambient-lighting/`
 
-- RGBW for true white light
+- RGBW (SK6812) for true white light
 - Circadian rhythm support
 - Sunrise/sunset simulation
-- Coming soon!
+- Moon phase effects
+- PIR motion sensor integration
+- BH1750 ambient light sensor
+- 10 build variants
 
-### 4. Multi-Channel Controller 📋
+**Quick start:**
+```bash
+cd projects/wled-controllers/moon-ambient-lighting
+./build.sh build moon_basic
+./build.sh flash moon_basic /dev/ttyUSB0
+```
+
+### 4. Multi-Channel Controller ✅
 **Location:** `projects/wled-controllers/multi-channel-controller/`
 
 - 4-8 independent LED outputs
 - Professional installations
-- Planned for future release
+- Synchronized or independent control
+- Fused outputs per channel
+- Up to 3200 total LEDs
+- 11 build configurations
+- Architectural/commercial focus
+
+**Quick start:**
+```bash
+cd projects/wled-controllers/multi-channel-controller
+./build.sh build multi_4ch
+./build.sh flash multi_4ch /dev/ttyUSB0
+```
 
 ---
 

@@ -8,8 +8,8 @@ Complete collection of ready-to-build WLED controller projects.
 |---------|--------|------------|------|------------|
 | [Basic ESP32 Controller](#1-basic-esp32-controller) | ✅ Complete | ⭐ Beginner | $25 | 1-2 hours |
 | [Sound Reactive Controller](#2-sound-reactive-controller) | ✅ Complete | ⭐⭐ Intermediate | $35 | 2-3 hours |
-| [Moon/Ambient Lighting](#3-moonambient-lighting) | 🚧 In Progress | ⭐ Beginner | $40 | 2-3 hours |
-| [Multi-Channel Controller](#4-multi-channel-controller) | 📋 Planned | ⭐⭐⭐ Advanced | $60 | 3-4 hours |
+| [Moon/Ambient Lighting](#3-moonambient-lighting) | ✅ Complete | ⭐ Beginner | $40 | 2-3 hours |
+| [Multi-Channel Controller](#4-multi-channel-controller) | ✅ Complete | ⭐⭐⭐ Advanced | $60 | 3-4 hours |
 
 ---
 
@@ -101,34 +101,49 @@ Complete collection of ready-to-build WLED controller projects.
 
 **Location:** `projects/wled-controllers/moon-ambient-lighting/`
 
-### Quick Facts (Planned)
+### Quick Facts
 - **Purpose:** Soft ambient lighting with circadian rhythm
 - **LEDs:** SK6812 RGBW (dedicated white LED)
 - **Features:** Warm-to-cool white transitions, sunrise/sunset simulation
 - **Best For:** Bedrooms, nurseries, mood lighting
 
-### Planned Features
+### What's Included
+✅ Complete README with RGBW setup guide
+✅ SK6812 RGBW LED integration
+✅ 10 build variants (basic, sensors, circadian, 30/60/180 LEDs, natural/warm white)
+✅ Hardware wiring diagrams
+✅ Circadian rhythm schedules
+✅ Moon phase simulation effects
+✅ PIR motion sensor integration (optional)
+✅ BH1750 light sensor integration (optional)
+✅ Power calculations for RGBW strips
+
+### Features
 - 🌙 **Moon phases** - Simulate lunar cycle
 - ☀️ **Circadian rhythm** - Auto warm/cool based on time
 - 🛏️ **Sleep mode** - Gradual dimming
 - ⏰ **Wake-up light** - Simulated sunrise
-- 📱 **Voice control** - Alexa/Google Home
-- 🎨 **Mood presets** - Relax, Focus, Sleep, Energize
+- 🎨 **RGBW Control** - True white + colors
+- 🔆 **Auto brightness** - Light sensor integration
+- 🚶 **Motion activation** - PIR sensor support
 
-### Components (Planned)
-- ESP32-WROOM-32
+### Components
+- ESP32-WROOM-32 (or ESP32-S3 for 300 LEDs)
 - SK6812 RGBW LED strip (true white)
-- 5V 5A power supply
-- Optional: Light sensor for auto-brightness
-- Optional: PIR sensor for motion activation
+- 5V 5-6A power supply
+- Optional: BH1750 light sensor
+- Optional: HC-SR501 PIR motion sensor
+- 74HCT125 level shifter
+- Basic components
 
-### Use Cases (Planned)
+### Use Cases
 - Bedroom ceiling light
 - Nursery night light
 - Reading nook
 - Meditation room
 - Home office (productivity lighting)
 - Sleep/wake routines
+- Smart bathroom lighting
 
 ---
 
@@ -136,33 +151,54 @@ Complete collection of ready-to-build WLED controller projects.
 
 **Location:** `projects/wled-controllers/multi-channel-controller/`
 
-### Quick Facts (Planned)
+### Quick Facts
 - **Purpose:** Control multiple LED strips independently
 - **Channels:** 4-8 independent outputs
 - **Features:** Synchronized or independent control
 - **Best For:** Large installations, architectural lighting
 
-### Planned Features
-- 🎛️ **4-8 Channels** - Independent LED strips
-- 🔀 **Sync modes** - All together or separate
-- 🎨 **Per-channel effects** - Different effect on each
-- 💪 **High power** - Professional PSU integration
-- 🏢 **Scalable** - Modular design
+### What's Included
+✅ Complete README with professional installation guide
+✅ 11 build variants (4ch, 6ch, 8ch, commercial, architectural)
+✅ Multiple LED type support (WS2812B, WS2815)
+✅ Power distribution schematics
+✅ Fusing strategy per channel
+✅ 74HCT125 level shifter integration
+✅ Control modes (synchronized, independent, zone, sequential)
+✅ Wiring diagrams for 4/6/8 channel setups
+✅ Professional enclosure recommendations
+✅ Safety warnings and best practices
 
-### Components (Planned)
-- ESP32-WROOM-32 or ESP32-S3
-- Multiple WS2813 strips (backup data)
-- 5V 20A+ power supply with distribution
-- Fused outputs
-- Professional enclosure
+### Features
+- 🎛️ **4-8 Channels** - Independent LED outputs
+- 🔀 **Sync modes** - Synchronized or independent
+- 🎨 **Per-channel control** - Different effects per channel
+- 💪 **High power** - 60-120A total capacity
+- 🏢 **Professional** - Fused outputs, power distribution
+- ⚡ **Scalable** - Up to 3200 LEDs total (ESP32-S3)
+- 🔧 **Flexible** - Zone-based and sequential control
 
-### Use Cases (Planned)
-- Building outline lighting
+### Components
+- ESP32-WROOM-32 or ESP32-S3 (recommended)
+- 4-8× 74HCT125 level shifters
+- WS2812B or WS2815 LED strips
+- 5V 60A+ power supply with distribution board
+- Automotive blade fuses (5A per channel)
+- Fuse holders
+- Terminal blocks
+- Professional enclosure (IP65 rated)
+- Heavy gauge wire (14-16 AWG)
+
+### Use Cases
+- Building outline lighting (4 sides)
 - Stage/theater lighting
 - Restaurant/bar installations
 - Multiple room synchronization
 - Large home installations
 - Commercial displays
+- Architectural accent lighting
+- Event venue lighting
+- Retail storefront displays
 
 ---
 
@@ -226,6 +262,20 @@ cd projects/wled-controllers/basic-esp32-controller
 cd projects/wled-controllers/sound-reactive-controller
 ./build.sh build sound_reactive
 ./build.sh flash sound_reactive /dev/ttyUSB0
+```
+
+### Moon/Ambient Lighting
+```bash
+cd projects/wled-controllers/moon-ambient-lighting
+./build.sh build moon_basic
+./build.sh flash moon_basic /dev/ttyUSB0
+```
+
+### Multi-Channel Controller
+```bash
+cd projects/wled-controllers/multi-channel-controller
+./build.sh build multi_4ch
+./build.sh flash multi_4ch /dev/ttyUSB0
 ```
 
 ### Use Build Manager (All Projects)
@@ -308,15 +358,13 @@ For building multiple projects:
 ### ✅ Completed
 - [x] Basic ESP32 Controller
 - [x] Sound Reactive Controller
+- [x] Moon/Ambient Lighting
+- [x] Multi-Channel Controller
 - [x] Build system infrastructure
 - [x] Documentation suite
 - [x] Wire selection guide
 - [x] LED selection guide
 - [x] Reliability & maintenance guide
-
-### 🚧 In Progress
-- [ ] Moon/Ambient Lighting
-- [ ] Multi-Channel Controller
 
 ### 📋 Planned Future Projects
 - [ ] Outdoor Permanent Installation

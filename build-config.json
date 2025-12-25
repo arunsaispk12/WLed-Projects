@@ -57,17 +57,163 @@
       "enabled": true,
       "environments": [
         {
-          "name": "esp32_sound",
-          "description": "Sound reactive with INMP441 mic",
+          "name": "sound_reactive",
+          "description": "Standard sound reactive build",
           "board": "esp32dev",
           "default": true
+        },
+        {
+          "name": "sound_reactive_s3",
+          "description": "ESP32-S3 with PSRAM for more effects",
+          "board": "esp32-s3-devkitc-1"
+        },
+        {
+          "name": "sound_debug",
+          "description": "Debug build with audio visualization",
+          "board": "esp32dev"
+        },
+        {
+          "name": "sound_high_gain",
+          "description": "High gain for quiet environments",
+          "board": "esp32dev"
+        },
+        {
+          "name": "sound_party",
+          "description": "Party mode optimized for loud music",
+          "board": "esp32dev"
+        },
+        {
+          "name": "sound_30led",
+          "description": "USB-powered 30 LED setup",
+          "board": "esp32dev"
+        },
+        {
+          "name": "sound_150led",
+          "description": "Large 150 LED installation",
+          "board": "esp32dev"
         }
       ],
       "features": [
-        "I2S microphone support",
+        "I2S microphone support (INMP441)",
         "FFT analysis",
         "Beat detection",
-        "Sound-reactive effects"
+        "Sound-reactive effects",
+        "Automatic gain control",
+        "Squelch filtering"
+      ]
+    },
+    "moon-ambient": {
+      "name": "Moon/Ambient Lighting Controller",
+      "path": "projects/wled-controllers/moon-ambient-lighting",
+      "enabled": true,
+      "environments": [
+        {
+          "name": "moon_basic",
+          "description": "Basic RGBW moon lighting",
+          "board": "esp32dev",
+          "default": true
+        },
+        {
+          "name": "moon_sensors",
+          "description": "With PIR motion and BH1750 light sensor",
+          "board": "esp32dev"
+        },
+        {
+          "name": "moon_circadian",
+          "description": "Circadian rhythm optimized",
+          "board": "esp32dev"
+        },
+        {
+          "name": "moon_30led",
+          "description": "Small 30 LED USB-powered",
+          "board": "esp32dev"
+        },
+        {
+          "name": "moon_60led",
+          "description": "Medium 60 LED installation",
+          "board": "esp32dev"
+        },
+        {
+          "name": "moon_180led",
+          "description": "Large 180 LED installation",
+          "board": "esp32dev"
+        },
+        {
+          "name": "moon_s3",
+          "description": "ESP32-S3 with PSRAM for 300 LEDs",
+          "board": "esp32-s3-devkitc-1"
+        }
+      ],
+      "features": [
+        "SK6812 RGBW support",
+        "Circadian rhythm automation",
+        "Moon phase simulation",
+        "Sunrise/sunset effects",
+        "PIR motion sensor support",
+        "BH1750 ambient light sensor",
+        "Warm white (2500-3000K)",
+        "Natural white (4000K)",
+        "Cool white (5000K)"
+      ]
+    },
+    "multi-channel": {
+      "name": "Multi-Channel Controller",
+      "path": "projects/wled-controllers/multi-channel-controller",
+      "enabled": true,
+      "environments": [
+        {
+          "name": "multi_4ch",
+          "description": "4-channel, 300 LEDs per channel",
+          "board": "esp32dev",
+          "default": true
+        },
+        {
+          "name": "multi_4ch_150led",
+          "description": "4-channel, 150 LEDs per channel",
+          "board": "esp32dev"
+        },
+        {
+          "name": "multi_6ch",
+          "description": "6-channel, 200 LEDs per channel",
+          "board": "esp32dev"
+        },
+        {
+          "name": "multi_8ch",
+          "description": "8-channel, 150 LEDs per channel",
+          "board": "esp32dev"
+        },
+        {
+          "name": "multi_4ch_ws2815",
+          "description": "4-channel WS2815 (12V, 500 LEDs/ch)",
+          "board": "esp32dev"
+        },
+        {
+          "name": "multi_commercial",
+          "description": "6-channel commercial installation",
+          "board": "esp32dev"
+        },
+        {
+          "name": "multi_architectural",
+          "description": "8-channel architectural (90A total)",
+          "board": "esp32dev"
+        },
+        {
+          "name": "multi_s3",
+          "description": "ESP32-S3, 8-channel, 400 LEDs/ch",
+          "board": "esp32-s3-devkitc-1"
+        }
+      ],
+      "features": [
+        "4-8 independent LED outputs",
+        "Up to 3200 total LEDs (S3)",
+        "Individual channel control",
+        "Synchronized effects",
+        "Zone-based control",
+        "Sequential animations",
+        "74HCT125 level shifters",
+        "Fused outputs per channel",
+        "Professional-grade power distribution",
+        "Architectural/commercial installations"
       ]
     },
     "wled-rainmaker": {
@@ -195,8 +341,32 @@
     {
       "name": "Party Lights",
       "build": "sound-reactive",
-      "environment": "esp32_sound",
+      "environment": "sound_reactive",
       "description": "Sound-reactive effects with microphone"
+    },
+    {
+      "name": "Bedroom Ambient",
+      "build": "moon-ambient",
+      "environment": "moon_circadian",
+      "description": "RGBW circadian lighting for better sleep"
+    },
+    {
+      "name": "Smart Bedroom",
+      "build": "moon-ambient",
+      "environment": "moon_sensors",
+      "description": "Auto-on with motion, auto brightness"
+    },
+    {
+      "name": "Building Outline",
+      "build": "multi-channel",
+      "environment": "multi_4ch",
+      "description": "4 sides of building, synchronized or independent"
+    },
+    {
+      "name": "Commercial Installation",
+      "build": "multi-channel",
+      "environment": "multi_commercial",
+      "description": "Restaurant, retail, or event venue"
     },
     {
       "name": "Smart Home",
