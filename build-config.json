@@ -1,0 +1,208 @@
+{
+  "version": "1.0.0",
+  "builds": {
+    "basic-esp32": {
+      "name": "Basic ESP32 Controller",
+      "path": "projects/wled-controllers/basic-esp32-controller",
+      "environments": [
+        {
+          "name": "esp32_basic",
+          "description": "Standard build for ESP32 with 60 LEDs",
+          "board": "esp32dev",
+          "default": true
+        },
+        {
+          "name": "esp32_release",
+          "description": "Optimized release build",
+          "board": "esp32dev"
+        },
+        {
+          "name": "esp32_debug",
+          "description": "Debug build with verbose logging",
+          "board": "esp32dev"
+        },
+        {
+          "name": "esp32_30led",
+          "description": "Build for 30 LEDs (lower power)",
+          "board": "esp32dev"
+        },
+        {
+          "name": "esp32_150led",
+          "description": "Build for 150 LEDs",
+          "board": "esp32dev"
+        },
+        {
+          "name": "esp32c3",
+          "description": "ESP32-C3 support",
+          "board": "esp32-c3-devkitm-1"
+        },
+        {
+          "name": "esp32s3",
+          "description": "ESP32-S3 with PSRAM",
+          "board": "esp32-s3-devkitc-1"
+        }
+      ],
+      "features": [
+        "WLED v0.14.x compatible",
+        "Up to 500 LEDs",
+        "WiFi control",
+        "Web interface",
+        "MQTT support",
+        "Mobile app compatible"
+      ]
+    },
+    "sound-reactive": {
+      "name": "Sound Reactive Controller",
+      "path": "projects/wled-controllers/sound-reactive-controller",
+      "enabled": false,
+      "environments": [
+        {
+          "name": "esp32_sound",
+          "description": "Sound reactive with INMP441 mic",
+          "board": "esp32dev",
+          "default": true
+        }
+      ],
+      "features": [
+        "I2S microphone support",
+        "FFT analysis",
+        "Beat detection",
+        "Sound-reactive effects"
+      ]
+    },
+    "wled-rainmaker": {
+      "name": "WLED-RainMaker Combo",
+      "path": "projects/custom-builds/wled-rainmaker-combo",
+      "enabled": false,
+      "environments": [
+        {
+          "name": "esp32_rainmaker",
+          "description": "WLED with RainMaker integration",
+          "board": "esp32dev",
+          "default": true
+        }
+      ],
+      "features": [
+        "Cloud connectivity",
+        "Voice assistant support",
+        "Remote control",
+        "OTA updates"
+      ]
+    }
+  },
+  "global_settings": {
+    "platform": "espressif32@6.4.0",
+    "framework": "arduino",
+    "monitor_speed": 115200,
+    "upload_speed": 460800
+  },
+  "build_profiles": {
+    "development": {
+      "description": "Development build with debug features",
+      "flags": [
+        "-D CORE_DEBUG_LEVEL=5",
+        "-D DEBUG_ESP_PORT=Serial"
+      ]
+    },
+    "release": {
+      "description": "Optimized release build",
+      "flags": [
+        "-Os",
+        "-D NDEBUG",
+        "-D RELEASE_BUILD"
+      ]
+    },
+    "minimal": {
+      "description": "Minimal build size",
+      "flags": [
+        "-Os",
+        "-D WLED_DISABLE_HUESYNC",
+        "-D WLED_DISABLE_INFRARED",
+        "-D WLED_MAX_USERMODS=0"
+      ]
+    }
+  },
+  "hardware_configs": {
+    "30_leds": {
+      "led_count": 30,
+      "max_current": 2000,
+      "default_brightness": 128
+    },
+    "60_leds": {
+      "led_count": 60,
+      "max_current": 3000,
+      "default_brightness": 128
+    },
+    "150_leds": {
+      "led_count": 150,
+      "max_current": 6000,
+      "default_brightness": 128
+    },
+    "300_leds": {
+      "led_count": 300,
+      "max_current": 12000,
+      "default_brightness": 100,
+      "power_injection": true
+    }
+  },
+  "led_types": {
+    "ws2812b": {
+      "name": "WS2812B",
+      "voltage": "5V",
+      "data_rate": "800kHz",
+      "color_order": "GRB"
+    },
+    "sk6812": {
+      "name": "SK6812",
+      "voltage": "5V",
+      "data_rate": "800kHz",
+      "color_order": "GRB"
+    },
+    "ws2813": {
+      "name": "WS2813",
+      "voltage": "5V",
+      "data_rate": "800kHz",
+      "color_order": "GRB",
+      "features": ["backup_data_line"]
+    },
+    "apa102": {
+      "name": "APA102",
+      "voltage": "5V",
+      "data_rate": "variable",
+      "color_order": "BGR",
+      "features": ["clock_line", "high_refresh"]
+    }
+  },
+  "recommended_builds": [
+    {
+      "name": "Beginner Setup",
+      "build": "basic-esp32",
+      "environment": "esp32_30led",
+      "description": "Perfect for learning, 30 LEDs with USB power"
+    },
+    {
+      "name": "Standard Setup",
+      "build": "basic-esp32",
+      "environment": "esp32_basic",
+      "description": "Most common setup, 60 LEDs"
+    },
+    {
+      "name": "Large Installation",
+      "build": "basic-esp32",
+      "environment": "esp32_150led",
+      "description": "Larger setups, requires power injection"
+    },
+    {
+      "name": "Party Lights",
+      "build": "sound-reactive",
+      "environment": "esp32_sound",
+      "description": "Sound-reactive effects with microphone"
+    },
+    {
+      "name": "Smart Home",
+      "build": "wled-rainmaker",
+      "environment": "esp32_rainmaker",
+      "description": "Cloud-connected with voice control"
+    }
+  ]
+}

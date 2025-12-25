@@ -55,14 +55,63 @@ See `integrations/rainmaker/` for the complete guide on integrating WLED with ES
 ## Documentation
 
 ### Essential Guides
+- [Quick Start Guide](QUICK_START.md) - Get started quickly
+- [Build System Guide](BUILD_SYSTEM.md) - Multi-configuration build system
 - [WLED-Rainmaker Integration Guide](integrations/rainmaker/INTEGRATION_GUIDE.md)
 - [Hardware Development Guide](docs/guides/HARDWARE_GUIDE.md)
 - [Project Setup Guide](docs/guides/PROJECT_SETUP.md)
+- [Troubleshooting Guide](docs/troubleshooting/COMMON_ISSUES.md)
 
 ### Resources
 - [WLED Official Documentation](https://kno.wled.ge/)
 - [ESP RainMaker Documentation](https://rainmaker.espressif.com/)
 - [ESP32 Datasheet](hardware/datasheets/)
+
+## Build System
+
+This repository includes a sophisticated build system for easy multi-configuration development:
+
+### Quick Build
+
+```bash
+# Build a project
+./build-manager.sh build projects/wled-controllers/basic-esp32-controller
+
+# Flash to device
+./build-manager.sh flash projects/wled-controllers/basic-esp32-controller /dev/ttyUSB0
+
+# Interactive mode
+./build-manager.sh
+```
+
+### Features
+
+- ✅ Multiple build configurations per project
+- ✅ Automated CI/CD with GitHub Actions
+- ✅ One-command building and flashing
+- ✅ Project templates for quick starts
+- ✅ Centralized configuration management
+
+See [BUILD_SYSTEM.md](BUILD_SYSTEM.md) for complete documentation.
+
+## Example Projects
+
+### Basic ESP32 Controller
+Located in `projects/wled-controllers/basic-esp32-controller/`
+
+- Standard WLED setup for ESP32
+- Supports 30-500 LEDs
+- Multiple build configurations
+- Complete documentation and wiring diagrams
+
+**Quick start:**
+```bash
+cd projects/wled-controllers/basic-esp32-controller
+./build.sh build
+./build.sh flash esp32_basic /dev/ttyUSB0
+```
+
+See the [project README](projects/wled-controllers/basic-esp32-controller/README.md) for details.
 
 ## Getting Started
 

@@ -1,0 +1,194 @@
+name: Build Firmware
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'projects/**'
+      - '.github/workflows/build-firmware.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Project to build (or "all")'
+        required: true
+        default: 'all'
+
+jobs:
+  build-basic-controller:
+    name: Build Basic ESP32 Controller
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment:
+          - esp32_basic
+          - esp32_release
+          - esp32_30led
+          - esp32_150led
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
+          restore-keys: |
+            ${{ runner.os }}-pio-
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Build firmware - ${{ matrix.environment }}
+        working-directory: projects/wled-controllers/basic-esp32-controller
+        run: pio run -e ${{ matrix.environment }}
+
+      - name: Get version info
+        id: version
+        run: |
+          echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Rename firmware
+        working-directory: projects/wled-controllers/basic-esp32-controller
+        run: |
+          mkdir -p firmware-artifacts
+          cp .pio/build/${{ matrix.environment }}/firmware.bin \
+             firmware-artifacts/basic-controller-${{ matrix.environment }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.sha_short }}.bin
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: basic-controller-${{ matrix.environment }}
+          path: projects/wled-controllers/basic-esp32-controller/firmware-artifacts/*.bin
+          retention-days: 30
+
+  build-sound-reactive:
+    name: Build Sound Reactive Controller
+    runs-on: ubuntu-latest
+    if: false  # Enable when project is ready
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware
+        working-directory: projects/wled-controllers/sound-reactive-controller
+        run: pio run
+
+  build-rainmaker-combo:
+    name: Build WLED-RainMaker Combo
+    runs-on: ubuntu-latest
+    if: false  # Enable when project is ready
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware
+        working-directory: projects/custom-builds/wled-rainmaker-combo
+        run: pio run
+
+  create-release:
+    name: Create Release Package
+    needs: [build-basic-controller]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: release-artifacts
+
+      - name: Get version info
+        id: version
+        run: |
+          echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Create checksums
+        working-directory: release-artifacts
+        run: |
+          find . -name "*.bin" -exec md5sum {} \; > checksums.md5
+          find . -name "*.bin" -exec sha256sum {} \; > checksums.sha256
+
+      - name: Create release archive
+        run: |
+          cd release-artifacts
+          zip -r ../firmware-release-${{ steps.version.outputs.date }}.zip .
+
+      - name: Upload release package
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware-release-${{ steps.version.outputs.date }}
+          path: firmware-release-*.zip
+          retention-days: 90
+
+  lint-check:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Run lint check
+        working-directory: projects/wled-controllers/basic-esp32-controller
+        run: pio check --skip-packages
+        continue-on-error: true
+
+  notify:
+    name: Build Notification
+    needs: [build-basic-controller, create-release]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Check build status
+        run: |
+          if [ "${{ needs.build-basic-controller.result }}" == "success" ]; then
+            echo "✅ Build successful!"
+          else
+            echo "❌ Build failed!"
+            exit 1
+          fi
