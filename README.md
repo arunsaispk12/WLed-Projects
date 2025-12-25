@@ -107,13 +107,15 @@ See [BUILD_SYSTEM.md](BUILD_SYSTEM.md) for complete documentation.
 
 ## Example Projects
 
-### Basic ESP32 Controller
-Located in `projects/wled-controllers/basic-esp32-controller/`
+See [PROJECTS_OVERVIEW.md](PROJECTS_OVERVIEW.md) for complete project catalog.
+
+### 1. Basic ESP32 Controller ✅
+**Location:** `projects/wled-controllers/basic-esp32-controller/`
 
 - Standard WLED setup for ESP32
 - Supports 30-500 LEDs
-- Multiple build configurations
-- Complete documentation and wiring diagrams
+- 8 build configurations
+- Complete documentation
 
 **Quick start:**
 ```bash
@@ -122,7 +124,39 @@ cd projects/wled-controllers/basic-esp32-controller
 ./build.sh flash esp32_basic /dev/ttyUSB0
 ```
 
-See the [project README](projects/wled-controllers/basic-esp32-controller/README.md) for details.
+### 2. Sound Reactive Controller ✅
+**Location:** `projects/wled-controllers/sound-reactive-controller/`
+
+- Music-synchronized LED visualization
+- I2S digital microphone (INMP441)
+- FFT analysis and beat detection
+- 9 build variants
+
+**Quick start:**
+```bash
+cd projects/wled-controllers/sound-reactive-controller
+./build.sh build sound_reactive
+./build.sh flash sound_reactive /dev/ttyUSB0
+```
+
+### 3. Moon/Ambient Lighting 🚧
+**Location:** `projects/wled-controllers/moon-ambient-lighting/`
+
+- RGBW for true white light
+- Circadian rhythm support
+- Sunrise/sunset simulation
+- Coming soon!
+
+### 4. Multi-Channel Controller 📋
+**Location:** `projects/wled-controllers/multi-channel-controller/`
+
+- 4-8 independent LED outputs
+- Professional installations
+- Planned for future release
+
+---
+
+See [PROJECTS_OVERVIEW.md](PROJECTS_OVERVIEW.md) for detailed comparison and selection guide.
 
 ## Getting Started
 

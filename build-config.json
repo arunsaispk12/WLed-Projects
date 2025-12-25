@@ -54,7 +54,7 @@
     "sound-reactive": {
       "name": "Sound Reactive Controller",
       "path": "projects/wled-controllers/sound-reactive-controller",
-      "enabled": false,
+      "enabled": true,
       "environments": [
         {
           "name": "esp32_sound",
