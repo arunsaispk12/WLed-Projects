@@ -62,9 +62,19 @@ See `integrations/rainmaker/` for the complete guide on integrating WLED with ES
 - [Project Setup Guide](docs/guides/PROJECT_SETUP.md) - Organize your projects
 
 **Hardware & Components:**
+- [Power Supply Selection Guide](docs/guides/POWER_SUPPLY_SELECTION_GUIDE.md) - Choose the right power supply
 - [Wire Selection Guide](docs/guides/WIRE_SELECTION_GUIDE.md) - Choose the right wire for your project
-- [LED Type Selection Guide](docs/guides/LED_SELECTION_GUIDE.md) - Compare and select LED types
+- [LED Type Selection Guide](docs/guides/LED_SELECTION_GUIDE.md) - Compare and select LED types (WS2811, WS2812B, WS2815, etc.)
+- [Level Shifter Guide](docs/guides/LEVEL_SHIFTER_GUIDE.md) - Interface ESP32 (3.3V) with LEDs (5V)
+- [Fuse Selection Guide](docs/guides/FUSE_SELECTION_GUIDE.md) - Protect your projects with proper fusing
 - [Hardware Development Guide](docs/guides/HARDWARE_GUIDE.md) - Design custom controllers
+
+**Sensors & Integration:**
+- [Sensor Integration Guide](docs/guides/SENSOR_INTEGRATION_GUIDE.md) - PIR, light sensors, microphones, temperature sensors
+- [Optional Components Guide](docs/guides/OPTIONAL_COMPONENTS_GUIDE.md) - Buttons, encoders, displays, IR remotes
+
+**Application-Specific:**
+- [Staircase Lighting Guide](docs/guides/STAIRCASE_LIGHTING_GUIDE.md) - Complete guide for staircase automation with PIR sensors
 
 **Integration & Advanced:**
 - [WLED-Rainmaker Integration Guide](integrations/rainmaker/INTEGRATION_GUIDE.md) - Cloud connectivity

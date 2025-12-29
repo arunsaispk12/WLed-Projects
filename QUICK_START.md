@@ -24,9 +24,20 @@ templates/       # Project templates
 Essential docs to get started:
 
 1. **Main README**: `README.md` - Overview of entire workspace
-2. **Hardware Guide**: `docs/guides/HARDWARE_GUIDE.md` - Build your own controllers
-3. **Project Setup**: `docs/guides/PROJECT_SETUP.md` - Start new projects
-4. **RainMaker Integration**: `integrations/rainmaker/INTEGRATION_GUIDE.md` - Cloud connectivity
+2. **Power Supply Guide**: `docs/guides/POWER_SUPPLY_SELECTION_GUIDE.md` - Choose the right power supply
+3. **LED Selection Guide**: `docs/guides/LED_SELECTION_GUIDE.md` - Choose the right LED type (WS2811, WS2812B, etc.)
+4. **Level Shifter Guide**: `docs/guides/LEVEL_SHIFTER_GUIDE.md` - Connect 3.3V ESP32 to 5V LEDs
+5. **Fuse Selection Guide**: `docs/guides/FUSE_SELECTION_GUIDE.md` - Safety and protection
+6. **Hardware Guide**: `docs/guides/HARDWARE_GUIDE.md` - Build your own controllers
+7. **Project Setup**: `docs/guides/PROJECT_SETUP.md` - Start new projects
+
+**Application-Specific:**
+8. **Staircase Lighting**: `docs/guides/STAIRCASE_LIGHTING_GUIDE.md` - Complete staircase automation guide
+9. **Sensor Integration**: `docs/guides/SENSOR_INTEGRATION_GUIDE.md` - PIR, light sensors, microphones
+10. **Optional Components**: `docs/guides/OPTIONAL_COMPONENTS_GUIDE.md` - Buttons, displays, IR remotes
+
+**Advanced:**
+11. **RainMaker Integration**: `integrations/rainmaker/INTEGRATION_GUIDE.md` - Cloud connectivity
 
 ### 3. Start Your First Project
 
@@ -197,10 +208,14 @@ Common ESP32 pins for WLED:
 
 | Type | Voltage | Speed | Notes |
 |------|---------|-------|-------|
+| WS2811 | 5V/12V | 800kHz | Outdoor pixels, 12V available |
 | WS2812B | 5V | 800kHz | Most common |
-| SK6812 | 5V | 800kHz | Better colors |
+| SK6812 | 5V | 800kHz | Better colors, RGBW option |
 | WS2813 | 5V | 800kHz | Backup data line |
+| WS2815 | 12V | 800kHz | Long runs, backup data |
 | APA102 | 5V | High | Needs clock line |
+
+See [LED Selection Guide](docs/guides/LED_SELECTION_GUIDE.md) for complete comparison.
 
 ### Power Calculations
 
@@ -221,10 +236,24 @@ Recommendation: 5A power supply
 
 ### Documentation
 
+**Essential Guides:**
 - `README.md` - Workspace overview
+- `docs/guides/POWER_SUPPLY_SELECTION_GUIDE.md` - Power supply selection
+- `docs/guides/LED_SELECTION_GUIDE.md` - LED type selection (WS2811, WS2812B, WS2815, etc.)
+- `docs/guides/WIRE_SELECTION_GUIDE.md` - Wire selection
+- `docs/guides/LEVEL_SHIFTER_GUIDE.md` - Level shifting (3.3V to 5V)
+- `docs/guides/FUSE_SELECTION_GUIDE.md` - Fuse selection and safety
 - `docs/guides/HARDWARE_GUIDE.md` - Hardware development
+
+**Integration & Sensors:**
+- `docs/guides/SENSOR_INTEGRATION_GUIDE.md` - PIR, light, sound, temperature sensors
+- `docs/guides/OPTIONAL_COMPONENTS_GUIDE.md` - Buttons, encoders, displays, IR
+- `docs/guides/STAIRCASE_LIGHTING_GUIDE.md` - Staircase automation with PIR
+
+**Advanced:**
 - `docs/guides/PROJECT_SETUP.md` - Project organization
-- `integrations/rainmaker/INTEGRATION_GUIDE.md` - RainMaker setup
+- `integrations/rainmaker/INTEGRATION_GUIDE.md` - RainMaker cloud setup
+- `docs/guides/RELIABILITY_MAINTENANCE.md` - Long-term reliability
 
 ### Community Resources
 

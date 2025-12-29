@@ -19,6 +19,7 @@ Comprehensive guide to selecting the right addressable LED type for your WLED pr
 
 | LED Type | Voltage | Speed | Colors | Data Pin(s) | Price | Reliability | Best For |
 |----------|---------|-------|--------|-------------|-------|-------------|----------|
+| **WS2811** | 5V/12V | 800kHz | RGB | 1 | $ | ⭐⭐⭐ | Outdoor pixels/nodes |
 | **WS2812B** | 5V | 800kHz | RGB | 1 | $ | ⭐⭐⭐ | General use |
 | **WS2813** | 5V | 800kHz | RGB | 2 (backup) | $$ | ⭐⭐⭐⭐⭐ | Critical installations |
 | **SK6812** | 5V | 800kHz | RGB/RGBW | 1 | $$ | ⭐⭐⭐⭐ | Better colors |
@@ -26,6 +27,116 @@ Comprehensive guide to selecting the right addressable LED type for your WLED pr
 | **WS2815** | 12V | 800kHz | RGB | 2 (backup) | $$$ | ⭐⭐⭐⭐⭐ | Long runs |
 | **APA102** | 5V | 20MHz | RGB | 2 (CLK+DAT) | $$$ | ⭐⭐⭐⭐⭐ | High speed/POV |
 | **SK9822** | 5V | 20MHz | RGB | 2 (CLK+DAT) | $$$ | ⭐⭐⭐⭐⭐ | APA102 alternative |
+
+### WS2811 (External IC)
+
+**The Outdoor/Pixel Choice**
+
+**Specifications:**
+- Voltage: 5V or 12V (two versions)
+- Current: 60mA per LED (18mA per color)
+- Protocol: Single-wire serial
+- Speed: 800kHz
+- Color: RGB (3 channels)
+- IC: External (not integrated into LED)
+
+**Key Differences from WS2812B:**
+- **External IC**: One IC controls 3 LEDs (or 1 RGB pixel)
+- **12V version available**: Better for long runs
+- **Commonly found in pixels/nodes**: Outdoor bullet pixels, modules
+- **More rugged**: IC separate from LED (better heat dissipation)
+- **Older technology**: Predecessor to WS2812B
+
+**Pros:**
+✅ Available in 12V (less voltage drop)
+✅ Very common in outdoor pixel strings
+✅ Rugged design (external IC)
+✅ Cheap (often cheaper than WS2812B)
+✅ Better heat dissipation (IC separate)
+✅ Good for pixel/node installations
+✅ Easy to replace individual pixels
+
+**Cons:**
+❌ No redundancy (one bad IC can affect 3 LEDs)
+❌ Lower pixel density (1 IC per 3 LEDs)
+❌ Less common in strip form
+❌ Timing-critical protocol
+❌ Older technology
+
+**Common Forms:**
+
+**12mm Bullet Pixels (Most Common):**
+- Individual RGB pixel nodes
+- 12V or 5V versions
+- Weatherproof (IP68)
+- Wire spacing: 4-6 inches typical
+- Perfect for outdoor displays
+
+**LED Modules:**
+- 3-LED modules
+- One WS2811 IC per module
+- Common in sign lighting
+- Easy to replace
+
+**LED Strips:**
+- Less common than WS2812B strips
+- External IC visible on strip
+- Available in 5V and 12V
+
+**Use When:**
+- Building outdoor pixel displays
+- Need 12V LEDs but want cheaper than WS2815
+- Individual addressable pixels needed
+- Permanent outdoor installations
+- Large outdoor holiday displays
+- Replaceable pixel design preferred
+
+**WLED Configuration:**
+
+For 5V WS2811:
+```cpp
+#define DEFAULT_LED_TYPE TYPE_WS2811_RGB
+#define LED_COLOR_ORDER RGB  // or GRB depending on your variant
+```
+
+For 12V WS2811:
+```cpp
+#define DEFAULT_LED_TYPE TYPE_WS2811_RGB
+#define LED_COLOR_ORDER RGB  // or GRB depending on your variant
+// Same settings, just use 12V power supply
+```
+
+**WS2811 vs WS2812B:**
+```
+WS2811:
+- External IC (1 IC controls 3 LEDs)
+- Available in 5V and 12V
+- Common in pixels/nodes
+- Better heat dissipation
+- Easier to replace failed sections
+
+WS2812B:
+- Integrated IC (1 IC per LED)
+- Only 5V
+- Common in strips
+- More compact
+- Higher pixel density
+```
+
+**12V WS2811 Power Advantage:**
+```
+100 pixels (300 LEDs) at full white:
+5V WS2811: 6A at 5V (30W)
+12V WS2811: 1.5A at 12V (18W) - same power, less current!
+
+Result: Less voltage drop, longer wire runs
+```
+
+**Recommendation:** ⭐ **Best for outdoor pixel/node installations and 12V strip projects**
+
+**Important Note:** When buying WS2811, always verify voltage (5V vs 12V) - they look identical but using wrong voltage will destroy them!
+
+---
 
 ### Standard WS2812B
 
@@ -482,17 +593,19 @@ GND    ────→ GND
 |----------|----------------|-------------|-----|
 | **First project** | WS2812B | SK6812 | Cheap, common, good support |
 | **Learning WLED** | WS2812B | - | Most tutorials use this |
-| **Budget project** | WS2812B | - | Cheapest option |
+| **Budget project** | WS2812B | WS2811 | Cheapest options |
 | **Permanent install** | WS2813 | WS2815 | Backup data line |
-| **Long runs (>5m)** | WS2815 | - | 12V reduces voltage drop |
-| **Outdoor** | WS2813/WS2815 | IP67 SK6812 | Reliability + weatherproof |
+| **Long runs (>5m)** | WS2815 | 12V WS2811 | 12V reduces voltage drop |
+| **Outdoor pixels** | 12V WS2811 | WS2815 | Weatherproof nodes, cheap |
+| **Outdoor strips** | WS2813/WS2815 | IP67 SK6812 | Reliability + weatherproof |
 | **Color accuracy** | SK6812 RGB | APA102 | Better color rendering |
 | **White lighting** | SK6812 RGBW | - | Dedicated white LED |
 | **POV display** | APA102 | SK9822 | High speed required |
 | **Matrix/grid** | WS2812B | APA102 | Depends on refresh rate |
 | **Wearables** | WS2812B Mini | - | Small, lightweight |
 | **Architectural** | WS2815 | WS2813 | Professional quality, long-term |
-| **Event/temporary** | WS2812B | - | Cost-effective, replaceable |
+| **Event/temporary** | WS2812B | WS2811 | Cost-effective, replaceable |
+| **Holiday lights** | 12V WS2811 pixels | WS2815 | Outdoor bullet pixels, cheap |
 
 ---
 
@@ -717,6 +830,148 @@ GND    ────→ GND
 - Prismatik or similar for screen sync
 - Game integration via API
 - USB-powered via PC
+
+---
+
+#### Outdoor Holiday Display (Pixel Lights)
+
+**Requirements:**
+- Weatherproof pixels
+- Large-scale (100-500+ pixels)
+- Outdoor mounting
+- Seasonal use
+- Budget-friendly
+
+**Recommended: 12V WS2811 Bullet Pixels, IP68**
+
+**Why:**
+- Specifically designed for outdoor use
+- Waterproof (IP68)
+- Individual pixels easy to replace
+- 12V reduces voltage drop over long runs
+- Very affordable (bulk pricing)
+- Purpose-built for holiday displays
+
+**Specs:**
+- Type: 12V WS2811
+- Form: 12mm bullet pixels
+- Spacing: 4-6 inches between pixels
+- IP Rating: IP68 (fully waterproof)
+- Power: 12V 5-10A for 100-200 pixels
+- Mounting: Screw/clip into pixel strips or custom
+
+**Power Distribution:**
+```
+12V PSU → 100 pixels = ~1.5A (no injection needed)
+12V PSU → 300 pixels = ~4.5A (injection at 150 pixels recommended)
+```
+
+**Alternative:** WS2815 strips if prefer continuous strip vs pixels
+
+**Purchase:**
+- Ray Wu's Store (AliExpress) - bulk pricing
+- BTF-Lighting (Amazon) - faster shipping
+- Buy 10-20% extra pixels for spares
+
+---
+
+## Other LED Types You Might Encounter
+
+While the LED types above are the most common for WLED projects, you may encounter these other types:
+
+### WS2801
+
+**Older Clock-Based LED:**
+- Voltage: 5V
+- Protocol: SPI (Clock + Data)
+- Speed: 1-2 MHz
+- Predecessor to APA102
+- Slower than APA102 but more reliable than WS2812B
+- Less common now (mostly replaced by APA102/SK9822)
+
+**When You'll See It:**
+- Older LED projects (pre-2015)
+- Surplus/used LED strips
+- Some RGB modules
+
+**WLED Support:** Yes, fully supported
+
+### LPD8806
+
+**Another Older Clock-Based LED:**
+- Voltage: 5V
+- Protocol: SPI (Clock + Data)
+- 7-bit color depth (vs 8-bit on newer LEDs)
+- Very reliable protocol
+- Mostly obsolete now
+
+**When You'll See It:**
+- Very old LED projects
+- Surplus equipment
+- Rare to find new
+
+**WLED Support:** Yes, but not recommended for new projects
+
+### UCS1903
+
+**WS2811 Alternative:**
+- Voltage: 5V or 12V
+- Similar to WS2811
+- Less common in Western markets
+- More common in Asian markets
+
+**When You'll See It:**
+- Generic LED strips from China
+- Cheaper alternative to WS2811
+
+**WLED Support:** Yes (use WS2811 settings)
+
+### TM1814
+
+**Newer RGBW Option:**
+- Voltage: 5V or 12V
+- Color: RGBW (4 channel)
+- Alternative to SK6812 RGBW
+- Growing in popularity
+
+**When You'll See It:**
+- RGBW strips
+- Alternative to SK6812 RGBW
+- Often cheaper
+
+**WLED Support:** Yes, full support in recent versions
+
+### P9823 / PL9823
+
+**WS2812B Clone:**
+- Functionally identical to WS2812B
+- Often cheaper
+- Quality varies
+- Common in no-name strips
+
+**When You'll See It:**
+- Generic LED strips
+- Very cheap strips
+- Budget products
+
+**WLED Support:** Yes (use WS2812B settings)
+
+### Recommendation for Other Types
+
+**If you're choosing LEDs for a new project:**
+- Stick with the main types covered above (WS2811, WS2812B, WS2813, SK6812, WS2815, APA102)
+- These have the best support, availability, and documentation
+
+**If you have existing LEDs:**
+- Most types are supported by WLED
+- Check WLED documentation for configuration
+- May need to experiment with settings
+
+**If buying used/surplus:**
+- Test before purchasing
+- Verify LED type
+- Check for dead pixels
+- May be good deal if working
 
 ---
 
@@ -1018,15 +1273,17 @@ Before ordering:
 ```
 Start Here
     │
-    ├─ Budget <$50 total? ──→ WS2812B
+    ├─ Outdoor pixel/node display? ──→ 12V WS2811 Pixels
     │
-    ├─ Need waterproof? ──→ WS2813 IP67
+    ├─ Budget <$50 total? ──→ WS2812B or WS2811
     │
-    ├─ >5 meter run? ──→ WS2815 (12V)
+    ├─ Need waterproof strips? ──→ WS2813 IP67 or WS2815 IP67
     │
-    ├─ Need white light? ──→ SK6812 RGBW
+    ├─ >5 meter run? ──→ WS2815 (12V) or 12V WS2811
     │
-    ├─ POV / High speed? ──→ APA102
+    ├─ Need white light? ──→ SK6812 RGBW or TM1814 RGBW
+    │
+    ├─ POV / High speed? ──→ APA102 or SK9822
     │
     ├─ Maximum reliability? ──→ WS2813 or WS2815
     │
@@ -1045,6 +1302,12 @@ Start Here
 - Perfect for learning
 - Wide availability
 
+**Choose WS2811 if:**
+- Outdoor pixel/node display needed
+- Need 12V on a budget (vs WS2815)
+- Building holiday light display
+- Individual replaceable pixels preferred
+
 **Upgrade to WS2813 if:**
 - Permanent installation
 - Hard-to-access location
@@ -1058,6 +1321,7 @@ Start Here
 - Long runs (>100 LEDs)
 - Professional installation
 - 12V acceptable
+- Continuous strip (vs pixels)
 
 **Upgrade to APA102 if:**
 - Need high speed
@@ -1067,11 +1331,15 @@ Start Here
 ### Final Recommendation
 
 **80% of projects:** WS2812B or WS2813
-**Professional/permanent:** WS2813 or WS2815
-**Dual-purpose lighting:** SK6812 RGBW
-**High-performance:** APA102
+**Outdoor pixels/nodes:** 12V WS2811 bullet pixels
+**Professional/permanent strips:** WS2813 or WS2815
+**Dual-purpose lighting:** SK6812 RGBW or TM1814 RGBW
+**High-performance:** APA102 or SK9822
 
-**When in doubt:** Start with WS2812B, upgrade later if needed!
+**When in doubt:**
+- Indoor strips: Start with WS2812B
+- Outdoor pixels: Start with 12V WS2811
+- Upgrade later if needed!
 
 ---
 
