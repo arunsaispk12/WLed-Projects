@@ -1,6 +1,12 @@
 # WLED Projects & Hardware Development
 
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](./CHANGELOG.md)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-green.svg)](./docs/guides/)
+[![License](https://img.shields.io/badge/license-MIT-purple.svg)](./LICENSE)
+
 A comprehensive workspace for WLED controller projects, custom hardware development, and ESP RainMaker integration.
+
+**Latest Update (v2.0.0)**: Added 6 comprehensive hardware guides - [See Changelog](./CHANGELOG.md)
 
 ## Directory Structure
 
