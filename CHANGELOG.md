@@ -5,6 +5,47 @@ All notable changes to the WLed Projects documentation and resources will be doc
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2024-12-29
+
+### Added
+
+**New Software & API Guides (2 Major Additions)**
+
+**WLED API Guide**
+- Complete REST API reference with HTTP GET parameters
+- JSON API documentation with request/response examples
+- WebSocket API for real-time bidirectional communication
+- MQTT integration with topics and examples
+- UDP protocols (sync, WARLS, DRGB, DDP)
+- Authentication methods and security
+- Integration examples (Home Assistant, Node-RED, Python, Bash)
+- Advanced features (macros, presets, playlists, live LED control)
+- Multiple programming language examples (Python, JavaScript, Node.js, Bash)
+- Troubleshooting and quick reference
+
+**Firmware Development Guide**
+- Complete PlatformIO setup (VS Code and CLI)
+- Step-by-step compilation instructions
+- Custom build configurations with platformio_override.ini
+- my_config.h for custom defaults
+- Build-time feature flags
+- Usermods installation and creation
+- Creating custom effects with examples
+- Firmware configuration and optimization
+- OTA updates (USB, WiFi, web-based)
+- Debugging techniques (serial, UDP remote, memory)
+- Build optimization and CI/CD integration
+- Multi-environment builds
+- Reducing firmware size
+
+### Documentation Updates
+
+- Updated README.md with "Software & Integration" section
+- Updated QUICK_START.md with API and Firmware guide references
+- Cross-referenced with all other guides
+
+---
+
 ## [2.0.0] - 2024-12-29
 
 ### Added

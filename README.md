@@ -1,12 +1,12 @@
 # WLED Projects & Hardware Development
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](./CHANGELOG.md)
 [![Documentation](https://img.shields.io/badge/docs-comprehensive-green.svg)](./docs/guides/)
 [![License](https://img.shields.io/badge/license-MIT-purple.svg)](./LICENSE)
 
 A comprehensive workspace for WLED controller projects, custom hardware development, and ESP RainMaker integration.
 
-**Latest Update (v2.0.0)**: Added 6 comprehensive hardware guides - [See Changelog](./CHANGELOG.md)
+**Latest Update (v2.1.0)**: Added API and Firmware Development guides - [See Changelog](./CHANGELOG.md)
 
 ## Directory Structure
 
@@ -82,7 +82,9 @@ See `integrations/rainmaker/` for the complete guide on integrating WLED with ES
 **Application-Specific:**
 - [Staircase Lighting Guide](docs/guides/STAIRCASE_LIGHTING_GUIDE.md) - Complete guide for staircase automation with PIR sensors
 
-**Integration & Advanced:**
+**Software & Integration:**
+- [WLED API Guide](docs/guides/WLED_API_GUIDE.md) - REST, JSON, MQTT, WebSocket control and automation
+- [Firmware Development Guide](docs/guides/FIRMWARE_DEVELOPMENT_GUIDE.md) - Compile, customize, and develop WLED firmware
 - [WLED-Rainmaker Integration Guide](integrations/rainmaker/INTEGRATION_GUIDE.md) - Cloud connectivity
 - [Reliability & Maintenance](docs/guides/RELIABILITY_MAINTENANCE.md) - Long-term operation
 

@@ -36,8 +36,12 @@ Essential docs to get started:
 9. **Sensor Integration**: `docs/guides/SENSOR_INTEGRATION_GUIDE.md` - PIR, light sensors, microphones
 10. **Optional Components**: `docs/guides/OPTIONAL_COMPONENTS_GUIDE.md` - Buttons, displays, IR remotes
 
+**Software & Development:**
+11. **WLED API Guide**: `docs/guides/WLED_API_GUIDE.md` - REST, JSON, MQTT, WebSocket APIs
+12. **Firmware Development**: `docs/guides/FIRMWARE_DEVELOPMENT_GUIDE.md` - Compile and customize WLED
+
 **Advanced:**
-11. **RainMaker Integration**: `integrations/rainmaker/INTEGRATION_GUIDE.md` - Cloud connectivity
+13. **RainMaker Integration**: `integrations/rainmaker/INTEGRATION_GUIDE.md` - Cloud connectivity
 
 ### 3. Start Your First Project
 
@@ -249,6 +253,10 @@ Recommendation: 5A power supply
 - `docs/guides/SENSOR_INTEGRATION_GUIDE.md` - PIR, light, sound, temperature sensors
 - `docs/guides/OPTIONAL_COMPONENTS_GUIDE.md` - Buttons, encoders, displays, IR
 - `docs/guides/STAIRCASE_LIGHTING_GUIDE.md` - Staircase automation with PIR
+
+**Software & Development:**
+- `docs/guides/WLED_API_GUIDE.md` - Complete API reference (REST, JSON, MQTT, WebSocket)
+- `docs/guides/FIRMWARE_DEVELOPMENT_GUIDE.md` - Compile, customize, create effects
 
 **Advanced:**
 - `docs/guides/PROJECT_SETUP.md` - Project organization
