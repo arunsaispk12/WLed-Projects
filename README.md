@@ -8,6 +8,8 @@ A comprehensive workspace for WLED controller projects, custom hardware developm
 
 **Latest Update (v2.1.0)**: Added API and Firmware Development guides - [See Changelog](./CHANGELOG.md)
 
+**Related Project:** [POI-LED](../POI%20Led/) - Performance props, visual LED art, and portable battery-powered LED controllers
+
 ## Directory Structure
 
 ```
@@ -87,6 +89,12 @@ See `integrations/rainmaker/` for the complete guide on integrating WLED with ES
 - [Firmware Development Guide](docs/guides/FIRMWARE_DEVELOPMENT_GUIDE.md) - Compile, customize, and develop WLED firmware
 - [WLED-Rainmaker Integration Guide](integrations/rainmaker/INTEGRATION_GUIDE.md) - Cloud connectivity
 - [Reliability & Maintenance](docs/guides/RELIABILITY_MAINTENANCE.md) - Long-term operation
+
+**Professional LED Software (Shared with POI-LED):**
+- [xLights Guide](../POI%20Led/docs/software/XLIGHTS_GUIDE.md) - Professional LED sequencing
+- [Jinx! Guide](../POI%20Led/docs/software/JINX_GUIDE.md) - LED matrix control
+- [LedFx Guide](../POI%20Led/docs/software/LEDFX_GUIDE.md) - Music-reactive effects
+- [Hyperion Guide](../POI%20Led/docs/software/HYPERION_GUIDE.md) - Ambilight for TVs
 
 **Troubleshooting:**
 - [Common Issues Guide](docs/troubleshooting/COMMON_ISSUES.md) - Solve problems quickly
@@ -221,6 +229,40 @@ When adding new projects:
 3. Document hardware requirements
 4. Add schematics to `hardware/` if custom PCB is involved
 5. Update this main README if needed
+
+## Related Projects
+
+### POI-LED - Performance Props & Visual LED Art
+
+**Location:** `../POI Led/`
+
+Companion repository for battery-powered LED performance props, POI spinning tools, LED hoops, and stage lighting.
+
+**Key Differences:**
+| Aspect | WLED-Projects (This Repo) | POI-LED |
+|--------|---------------------------|---------|
+| **Focus** | Static installations, home lighting | Performance props, portable |
+| **Power** | AC/DC mains powered | Battery powered (18650, LiPo) |
+| **Use Cases** | Home, architectural, sensors | Stage shows, flow arts, POV display |
+| **Control** | WiFi, home automation | Wireless, standalone playback |
+| **Runtime** | Continuous (mains) | 1-2 hours (battery) |
+
+**Shared Technologies:**
+- ✅ ESP32 platform
+- ✅ WLED/ARGB firmware
+- ✅ Same LED types (WS2812B, APA102, SK6812)
+- ✅ E1.31, DDP, Art-Net protocols
+- ✅ xLights, LedFx, Hyperion, Jinx! software
+
+**Integration Guide:** [POI-LED Integration](../POI%20Led/integrations/wled-projects/INTEGRATION_GUIDE.md)
+
+**POI-LED Documentation:**
+- [POI-LED README](../POI%20Led/README.md)
+- [Product Catalog](../POI%20Led/docs/PRODUCT_CATALOG.md)
+- [POI Hardware Guide](../POI%20Led/docs/hardware/POI_HARDWARE_GUIDE.md)
+- [Happy Smart Light Products](https://happysmartlight.com/)
+
+---
 
 ## Notes
 
