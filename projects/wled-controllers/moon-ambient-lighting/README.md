@@ -75,9 +75,13 @@ Unlike RGB-only strips that mix red, green, and blue to make "white":
 | GPIO4 | PIR Sensor | HC-SR501 OUT (optional) | Motion detect |
 | GPIO21 | I2C SDA | BH1750 SDA (optional) | Light sensor |
 | GPIO22 | I2C SCL | BH1750 SCL (optional) | Light sensor |
-| 3.3V | Sensor Power | PIR VCC, BH1750 VCC | Shared 3.3V |
+| 5V | PIR Power | HC-SR501 VCC | HC-SR501 needs 4.5V-20V! |
+| 3.3V | Sensor Power | BH1750 VCC | I2C sensor power |
 | GND | Ground | Common GND | All grounds |
 | 5V | LED Power | SK6812 5V | Via power supply |
+
+**WARNING:** HC-SR501 PIR sensor requires **4.5V minimum** — do NOT power from 3.3V!
+If using AM312 mini PIR instead, 3.3V is acceptable (AM312 range: 3.3V-12V).
 
 ## Wiring Diagram
 
@@ -121,8 +125,8 @@ ESP32
 │              │
 │  GPIO22 (SCL)┼───────────→ BH1750 SCL (with 4.7kΩ pull-up to 3.3V)
 │              │
-│  3.3V       ─┼─────┬─────→ PIR VCC
-│              │     └─────→ BH1750 VCC
+│  5V         ─┼───────────→ PIR VCC (HC-SR501 needs 4.5V+!)
+│  3.3V       ─┼───────────→ BH1750 VCC
 │              │
 │  GND        ─┼─────Common Ground to all
 └──────────────┘
@@ -406,8 +410,8 @@ Colors: Blues, purples, teals
 
 **PIR Motion Sensor:**
 1. Mount in location with good view of room
-2. Connect VCC to ESP32 3.3V
-3. Connect OUT to GPIO4
+2. Connect VCC to **5V** (HC-SR501 requires 4.5V-20V, do NOT use 3.3V!)
+3. Connect OUT to GPIO4 (HC-SR501 output is 3.3V, safe for ESP32)
 4. Connect GND to ESP32 GND
 5. Adjust sensitivity potentiometer
 6. Test detection range

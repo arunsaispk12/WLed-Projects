@@ -36,24 +36,33 @@ Calculate total power needed:
 
 ```
 Total Power (W) = Number of LEDs × Power per LED
-Power per LED = ~0.06W (20mA × 3V per color channel at full white)
 
-Example:
-60 LEDs × 0.06W = 3.6W minimum
-Add 20% safety margin = 4.32W
-At 5V: 4.32W / 5V = 0.864A
+WS2812B at full white (all 3 color channels on):
+- Per channel: ~20mA
+- Full white (R+G+B): 3 × 20mA = 60mA per LED
+- Power per LED at 5V: 60mA × 5V = 0.3W
 
-Recommendation: Use 2A+ power supply for 60 LEDs
+Example (60 LEDs at full white):
+60 LEDs × 0.3W = 18W maximum
+60 LEDs × 60mA = 3.6A maximum
+Add 20% safety margin = 4.32A
+
+Typical usage (colors/effects, not full white):
+60 LEDs × 30mA avg = 1.8A typical
+
+Recommendation: Use 5V 5A power supply for 60 LEDs
+(provides headroom for full white and power spikes)
 ```
 
 ### Power Supply Selection
 
-| LED Count | Recommended Supply | Notes |
-|-----------|-------------------|-------|
-| 1-30 | 5V 1A | USB power acceptable |
-| 30-100 | 5V 3A | Dedicated power supply |
-| 100-300 | 5V 5-10A | Injection recommended |
-| 300+ | 5V 10A+ | Multiple injection points |
+| LED Count | Max Current (full white) | Recommended Supply | Notes |
+|-----------|--------------------------|-------------------|-------|
+| 1-30 | 1.8A | 5V 2-3A | USB power OK for <15 LEDs only |
+| 30-60 | 3.6A | 5V 5A | Dedicated power supply required |
+| 60-150 | 9A | 5V 10A | Power injection recommended |
+| 150-300 | 18A | 5V 20A+ | Multiple injection points required |
+| 300+ | 18A+ | 5V 30A+ | Inject every 100-150 LEDs |
 
 ### LED Strip Specifications
 
@@ -234,26 +243,39 @@ Convert 3.3V GPIO to 5V for LEDs:
 #### Level Shifter Circuit (74HCT125)
 
 ```
-ESP32 GPIO2 ──[470Ω]── 74HCT125 Pin 2 (A1)
-                           │
-                    Pin 1 (/OE) ── GND (always enabled)
-                    Pin 3 (Y1) ────── To LED Strip Data
-                    Pin 14 (VCC) ─── 5V
-                    Pin 7 (GND) ──── GND
+74HCT125 Pin Connections (verify against datasheet):
+
+  Pin 1  (1/OE)  ──── GND  (enable output, active LOW)
+  Pin 2  (1A)    ──── ESP32 GPIO2 via [470Ω] resistor (data input)
+  Pin 3  (1Y)    ──── To LED Strip Data (data output at 5V)
+  Pin 7  (GND)   ──── GND
+  Pin 14 (VCC)   ──── 5V  (MUST be 5V for level shifting!)
+  + 0.1µF ceramic capacitor between Pin 14 and Pin 7
+
+Schematic:
+  ESP32 GPIO2 ──[470Ω]── Pin 2 (1A) ─┐
+                                       │ 74HCT125
+  LED Strip Data ──── Pin 3 (1Y) ─────┘
+  GND ── Pin 1 (1/OE)    5V ── Pin 14 (VCC)    GND ── Pin 7
 ```
 
-#### Alternative: MOSFET Level Shifter
+#### Alternative: MOSFET Level Shifter (BSS138 Bidirectional)
 
 ```
-ESP32 GPIO2 ──[10kΩ]──┬──── 5V
-                      │
-                   [BSS138]
-                  G   D   S
-                  │   │   │
-                  │   │   └──── GND
-                  │   │
-                  │   └──────── To LED Strip Data
-                  └───[10kΩ]─── GND
+3.3V ──[10kΩ]──┬─────────────────┬──[10kΩ]── 5V
+               │                 │
+          (Source)           (Drain)
+               │   ┌───────┐   │
+               └───│S     D│───┘
+                   │ BSS138│
+               ┌───│G      │
+               │   └───────┘
+              3.3V (Gate = LOW voltage rail)
+               │                 │
+ESP32 GPIO2 ───┘                 └──── To LED Strip Data
+
+Note: Gate connects to 3.3V rail, Source is low-voltage side,
+      Drain is high-voltage side. This is NON-inverting.
 ```
 
 ### Full Featured Controller

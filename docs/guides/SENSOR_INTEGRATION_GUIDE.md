@@ -116,8 +116,12 @@ ESP32
   │
   ├─ GPIO13 ──── PIR 1 (entrance)
   ├─ GPIO14 ──── PIR 2 (hallway)
-  └─ GPIO15 ──── PIR 3 (room)
+  └─ GPIO27 ──── PIR 3 (room)
 ```
+
+**WARNING:** Do NOT use GPIO15 for sensors — it is a boot strapping
+pin (must be LOW at boot). GPIO6-11 are also reserved (flash memory).
+See "Avoid These Pins" section below for full list.
 
 **Use Case:**
 - Stairway lighting (top and bottom sensors)
@@ -402,13 +406,17 @@ int soundLevel = analogRead(36);  // 0-4095
 
 ```
 INMP441           ESP32
-  VCC ────────── 3.3V
+  VDD ────────── 3.3V
   GND ────────── GND
-  SCK ────────── GPIO14 (I2S Clock)
-  WS  ────────── GPIO15 (Word Select)
-  SD  ────────── GPIO32 (Serial Data)
+  SCK ────────── GPIO32 (I2S Bit Clock)
+  WS  ────────── GPIO25 (I2S Word Select)
+  SD  ────────── GPIO33 (I2S Serial Data)
   L/R ────────── GND (left channel)
 ```
+
+**WARNING:** Do NOT use GPIO14/GPIO15 for I2S — GPIO15 is a boot
+strapping pin and can cause boot failures. The pin assignments above
+match the sound-reactive-controller project and HARDWARE_GUIDE.md.
 
 #### Complete Connection
 
@@ -417,9 +425,9 @@ INMP441                ESP32
 ┌─────────┐         ┌─────────┐
 │  VDD    │─────────│ 3.3V    │
 │  GND    │─────────│ GND     │
-│  SCK    │─────────│ GPIO14  │
-│  WS     │─────────│ GPIO15  │
-│  SD     │─────────│ GPIO32  │
+│  SCK    │─────────│ GPIO32  │
+│  WS     │─────────│ GPIO25  │
+│  SD     │─────────│ GPIO33  │
 │  L/R    │─────────│ GND     │
 └─────────┘         └─────────┘
 ```
@@ -435,9 +443,9 @@ INMP441                ESP32
 
 1. Flash sound-reactive firmware
 2. Settings → Sound Settings:
-   - I2S SD: GPIO32
-   - I2S WS: GPIO15
-   - I2S SCK: GPIO14
+   - I2S SD: GPIO33
+   - I2S WS: GPIO25
+   - I2S SCK: GPIO32
    - Microphone Type: INMP441
 
 3. Effects → Enable sound-reactive effects
@@ -947,11 +955,14 @@ ESP32 GPIO Map:
 - **PIR:** GPIO13 (recommended)
 - **Encoder:** GPIO16, GPIO17
 
-**Avoid These Pins:**
-- GPIO0: Boot button
-- GPIO2: Often used for LED data
-- GPIO6-11: Connected to flash (DO NOT USE)
-- GPIO12: Boot fail if pulled high
+**Avoid These Pins (Strapping/Reserved):**
+- GPIO0: Boot button (strapping pin)
+- GPIO2: Often used for LED data (strapping pin, must be LOW or floating at boot)
+- GPIO6-11: Connected to internal flash (DO NOT USE — will crash ESP32)
+- GPIO12: Boot fail if pulled HIGH (strapping pin — selects flash voltage)
+- GPIO15: Boot strapping pin (must be LOW at boot, controls debug output)
+
+**Safe GPIO for sensors:** GPIO4, GPIO13, GPIO14, GPIO16, GPIO17, GPIO25-27, GPIO32-35
 
 ### Related Guides
 

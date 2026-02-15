@@ -70,6 +70,7 @@ See `integrations/rainmaker/` for the complete guide on integrating WLED with ES
 - [Project Setup Guide](docs/guides/PROJECT_SETUP.md) - Organize your projects
 
 **Hardware & Components:**
+- [Hardware Review Checklist](docs/HARDWARE_REVIEW_CHECKLIST.md) - **MANDATORY** verification before modifying any hardware docs
 - [Power Supply Selection Guide](docs/guides/POWER_SUPPLY_SELECTION_GUIDE.md) - Choose the right power supply
 - [Wire Selection Guide](docs/guides/WIRE_SELECTION_GUIDE.md) - Choose the right wire for your project
 - [LED Type Selection Guide](docs/guides/LED_SELECTION_GUIDE.md) - Compare and select LED types (WS2811, WS2812B, WS2815, etc.)

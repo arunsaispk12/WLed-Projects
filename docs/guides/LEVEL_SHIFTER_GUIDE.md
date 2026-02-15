@@ -96,41 +96,46 @@ LED needs 3.5V HIGH minimum (at 5V power)
 ### Pinout Diagram
 
 ```
-        74HCT125
+        74HCT125 (Top View)
      ┌────────────┐
-  1A │1        14│ VCC (5V)
-  1OE│2        13│ 4OE
-  1Y │3        12│ 4Y
-  2A │4        11│ 4A
-  2OE│5        10│ 3OE
-  2Y │6         9│ 3Y
- GND │7         8│ 3A
+ 1/OE│1        14│ VCC (5V)
+  1A │2        13│ 4/OE
+  1Y │3        12│ 4A
+ 2/OE│4        11│ 4Y
+  2A │5        10│ 3/OE
+  2Y │6         9│ 3A
+ GND │7         8│ 3Y
      └────────────┘
 
-Pin Functions:
-- 1A, 2A, 3A, 4A: Inputs (3.3V from ESP32)
-- 1Y, 2Y, 3Y, 4Y: Outputs (5V to LEDs)
-- 1OE, 2OE, 3OE, 4OE: Output Enable (active LOW)
-- VCC: 5V power
-- GND: Ground
+Pin Functions (active channel 1 shown):
+- Pin 1 (1/OE): Output Enable for channel 1 (active LOW → tie to GND to enable)
+- Pin 2 (1A):   Input for channel 1 (3.3V signal from ESP32)
+- Pin 3 (1Y):   Output for channel 1 (5V signal to LEDs)
+- Pin 7 (GND):  Ground
+- Pin 14 (VCC): 5V power (MUST be 5V, NOT 3.3V)
+
+All 4 channels follow same pattern:
+- /OE pins: 1, 4, 10, 13 (active LOW — tie to GND to enable)
+- Input (A) pins: 2, 5, 9, 12
+- Output (Y) pins: 3, 6, 8, 11
 ```
 
 ### Basic Connection (Single LED Strip)
 
 ```
-ESP32                74HCT125             LED Strip
+ESP32                74HCT125                   LED Strip
                    ┌────────────┐
-GPIO2 ─────────────│1A       1Y│──────── DI (Data In)
+                   │Pin1 (1/OE) │──── GND (enable output)
+GPIO2 ─────────────│Pin2 (1A)   │              (Input)
+                   │Pin3 (1Y)   │──────────── DI (Data In)
                    │            │
-3.3V ──────────────│VCC         │
-                   │            │
-GND ───────────────│GND     1OE│
+5V PSU ────────────│Pin14 (VCC) │              (MUST be 5V!)
+GND ───────────────│Pin7  (GND) │
                    └────────────┘
-                        │
-                       GND (enable output)
 
 5V PSU ────────────────────────────────── LED 5V
 GND ───────────────────────────────────── LED GND
+ESP32 GND, 74HCT125 GND, LED GND ─────── All connected together
 ```
 
 ### Detailed Wiring
@@ -138,16 +143,15 @@ GND ─────────────────────────�
 **Step-by-Step:**
 
 1. **Power the 74HCT125:**
-   - Pin 14 (VCC) → 5V power supply
+   - Pin 14 (VCC) → **5V** power supply (MUST be 5V, NOT 3.3V!)
    - Pin 7 (GND) → Ground
 
-2. **Connect ESP32 to Input:**
-   - ESP32 GPIO2 → Pin 1 (1A)
-   - Can use any of 4 inputs: 1A, 2A, 3A, or 4A
+2. **Enable the Output:**
+   - Pin 1 (1/OE) → Ground (enables output 1Y, active LOW)
 
-3. **Enable the Output:**
-   - Pin 2 (1OE) → Ground (enables output 1Y)
-   - OE = Output Enable, active LOW
+3. **Connect ESP32 to Input:**
+   - ESP32 GPIO2 → Pin 2 (1A) — this is the data input
+   - Can use any of 4 input channels: Pin 2 (1A), Pin 5 (2A), Pin 9 (3A), Pin 12 (4A)
 
 4. **Connect Output to LED Strip:**
    - Pin 3 (1Y) → LED strip Data In (DI)
@@ -160,19 +164,23 @@ GND ─────────────────────────�
 **For Multi-Channel Controller:**
 
 ```
-ESP32                74HCT125             LED Strips
-                   ┌────────────┐
-GPIO2 ─────────────│1A       1Y│──────── Strip 1 DI
-GPIO4 ─────────────│2A       2Y│──────── Strip 2 DI
-GPIO16 ────────────│3A       3Y│──────── Strip 3 DI
-GPIO17 ────────────│4A       4Y│──────── Strip 4 DI
-                   │            │
-5V ────────────────│VCC         │
-GND ───────────────│GND         │
-                   │            │
-GND ───────────────│1OE,2OE,    │ (enable all outputs)
-                   │3OE,4OE     │
-                   └────────────┘
+ESP32                74HCT125                  LED Strips
+                   ┌──────────────────┐
+GND ───────────────│Pin1  (1/OE)      │  (enable ch1)
+GPIO2 ─────────────│Pin2  (1A)  Pin3  (1Y)│──── Strip 1 DI
+GND ───────────────│Pin4  (2/OE)      │  (enable ch2)
+GPIO4 ─────────────│Pin5  (2A)  Pin6  (2Y)│──── Strip 2 DI
+                   │Pin7  (GND)       │
+                   │Pin8  (3Y)────────│──── Strip 3 DI
+GPIO16 ────────────│Pin9  (3A)        │
+GND ───────────────│Pin10 (3/OE)      │  (enable ch3)
+                   │Pin11 (4Y)────────│──── Strip 4 DI
+GPIO17 ────────────│Pin12 (4A)        │
+GND ───────────────│Pin13 (4/OE)      │  (enable ch4)
+5V ────────────────│Pin14 (VCC)       │  (MUST be 5V!)
+                   └──────────────────┘
+
+/OE pins (1, 4, 10, 13) → all to GND (enable all outputs)
 ```
 
 **Benefits:**
@@ -185,22 +193,27 @@ GND ───────────────│1OE,2OE,    │ (enable all 
 **Recommended Setup:**
 
 ```
-ESP32          74HCT125                LED Strip
-            ┌────────────┐
-GPIO2 ──────│1A       1Y│────[470Ω]──── DI
-            │            │
+ESP32            74HCT125                    LED Strip
+              ┌────────────┐
+GPIO2 ─[470Ω]─│Pin2 (1A)  Pin3 (1Y)│────── DI
+              │                      │
+              │Pin1 (1/OE) → GND    │
+              │Pin14 (VCC) → 5V     │
+              │Pin7  (GND) → GND    │
+              └────────────┘
 ```
 
-**Resistor Value:**
+**Resistor Placement: Between ESP32 GPIO and 74HCT125 input (Pin 2)**
 - 220Ω - 470Ω typical
-- Protects ESP32 pin
-- Reduces signal reflections
-- Improves reliability
+- Place on the INPUT side, NOT the output side
+- Protects ESP32 GPIO pin from overcurrent
+- Reduces signal reflections on the data line
 
 **Why 470Ω?**
 - Limits current if short circuit occurs
 - Doesn't significantly slow signal
 - Good balance of protection and performance
+- 74HCT125 input is high-impedance, so 470Ω has no effect on signal level
 
 ### Decoupling Capacitor
 
@@ -231,16 +244,22 @@ GPIO2 ──────│1A       1Y│────[470Ω]──── DI
                   ┌────────────┐       │
 ESP32             │  74HCT125  │       │
   │               │            │       │
-GPIO2 ─[470Ω]────│1A       1Y│───────DI
-  │               │            │
-  │    ┌──────────│VCC         │
-  │    │          │            │
-3.3V───┘     ┌───│GND     1OE│
-  │          │   └────────────┘
-  │          │        │    │
-GND──────────┴────────┴────┴──────────GND
+  │          ┌────│Pin1 (1/OE) │       │
+  │          │    │            │       │
+GPIO2 ─[470Ω]────│Pin2 (1A)   │       │
+  │               │            │       │
+  │          ┌────│Pin3 (1Y)───│───────DI
+  │          │    │            │
+  │    ┌─────│────│Pin14 (VCC) │
+  │    │     │    │            │
+  │    5V    │ ┌──│Pin7  (GND) │
+  │          │ │  └────────────┘
+  │          │ │       │
+GND──────────┴─┴───────┴──────────────GND
                 │
-             [0.1µF]
+             [0.1µF] (between Pin14 VCC and Pin7 GND)
+
+IMPORTANT: VCC (Pin 14) MUST connect to 5V, NOT 3.3V!
 ```
 
 ### PCB Layout Tips
@@ -301,45 +320,55 @@ The 74AHCT125 is nearly identical to 74HCT125 but faster:
 ### Pinout
 
 ```
-        SN74HCT245
+        SN74HCT245 (Top View)
      ┌────────────┐
  DIR │1        20│ VCC (5V)
-  A1 │2        19│ A8
-  A2 │3        18│ A7
-  A3 │4        17│ A6
-  A4 │5        16│ A5
-  A5 │6        15│ A4
-  A6 │7        14│ A3
-  A7 │8        13│ A2
-  A8 │9        12│ A1
- GND │10       11│ OE
+  A1 │2        19│ B1
+  A2 │3        18│ B2
+  A3 │4        17│ B3
+  A4 │5        16│ B4
+  A5 │6        15│ B5
+  A6 │7        14│ B6
+  A7 │8        13│ B7
+  A8 │9        12│ B8
+ GND │10       11│ /OE
      └────────────┘
+
+Pin Functions:
+- A1-A8 (Pins 2-9):   Input side (3.3V from ESP32)
+- B1-B8 (Pins 19-12): Output side (5V to LEDs)
+- DIR (Pin 1):         Direction — HIGH = A→B, LOW = B→A
+- /OE (Pin 11):        Output Enable (active LOW → tie to GND)
+- VCC (Pin 20):        5V power (MUST be 5V!)
+- GND (Pin 10):        Ground
 ```
 
 ### Connection for WLED
 
 ```
-ESP32          SN74HCT245         LED Strips
-            ┌────────────┐
-GPIO2  ─────│A1       B1│──────── Strip 1
-GPIO4  ─────│A2       B2│──────── Strip 2
-GPIO16 ─────│A3       B3│──────── Strip 3
-GPIO17 ─────│A4       B4│──────── Strip 4
-GPIO25 ─────│A5       B5│──────── Strip 5
-GPIO26 ─────│A6       B6│──────── Strip 6
-GPIO27 ─────│A7       B7│──────── Strip 7
-GPIO32 ─────│A8       B8│──────── Strip 8
-            │            │
-5V ─────────│VCC         │
-GND ────────│GND         │
-GND ────────│DIR     OE ││──── GND
-            └────────────┘
+ESP32            SN74HCT245           LED Strips
+              ┌────────────┐
+GPIO2  ───────│A1 (Pin2)   B1 (Pin19)│──── Strip 1
+GPIO4  ───────│A2 (Pin3)   B2 (Pin18)│──── Strip 2
+GPIO16 ───────│A3 (Pin4)   B3 (Pin17)│──── Strip 3
+GPIO17 ───────│A4 (Pin5)   B4 (Pin16)│──── Strip 4
+GPIO25 ───────│A5 (Pin6)   B5 (Pin15)│──── Strip 5
+GPIO26 ───────│A6 (Pin7)   B6 (Pin14)│──── Strip 6
+GPIO27 ───────│A7 (Pin8)   B7 (Pin13)│──── Strip 7
+GPIO32 ───────│A8 (Pin9)   B8 (Pin12)│──── Strip 8
+              │                       │
+5V ───────────│VCC (Pin20)            │
+GND ──────────│GND (Pin10)            │
+5V ───────────│DIR (Pin1)             │  ← MUST be HIGH for A→B!
+GND ──────────│/OE (Pin11)            │  ← GND to enable outputs
+              └────────────┘
 ```
 
-**DIR Pin:** Direction control
-- Tied to GND for A→B (ESP32 to LEDs)
+**DIR Pin (Pin 1):** Direction control
+- **HIGH (5V) = A→B** (ESP32 to LEDs) ← CORRECT for level shifting
+- LOW (GND) = B→A (wrong direction!)
 
-**OE Pin:** Output Enable
+**/OE Pin (Pin 11):** Output Enable (active LOW)
 - Tied to GND (always enabled)
 
 ---
@@ -348,52 +377,55 @@ GND ────────│DIR     OE ││──── GND
 
 ### BSS138 MOSFET Circuit
 
-**Simple 2-Component Level Shifter:**
+**Bidirectional Level Shifter using N-Channel MOSFET:**
 
 ```
-          BSS138 MOSFET
-              │
-3.3V ─[10kΩ]─┴─[10kΩ]─ 5V
-              │
-ESP32 ────────┤Gate
-GPIO2         │
-              │Source
-              ↓
-             GND
+          BSS138 N-MOSFET (Bidirectional Level Shifter)
 
-Output to LED taken from Drain
+3.3V ─[10kΩ]─┬───────────────┬─[10kΩ]─ 5V
+              │               │
+         Low Side         High Side
+        (Source)          (Drain)
+              │               │
+              │   ┌───────┐   │
+              └───│S     D│───┘
+                  │ BSS138│
+              ┌───│G      │
+              │   └───────┘
+             3.3V (Gate tied to LOW voltage rail)
 ```
 
 ### Complete Schematic
 
 ```
-ESP32                               LED Strip
-  │                                    │
-GPIO2 ────┬────────────────────────── DI
-          │
-        [BSS138]
-       G  │  D
-          │  │
-          │  └─[10kΩ]─── 5V
-          │
-        [10kΩ]
-          │
-         GND
+                    BSS138
+3.3V ──[10kΩ]──┬──(Source)──────(Drain)──┬──[10kΩ]── 5V
+               │                         │
+ESP32 GPIO2 ───┘                         └─── LED Strip DI
+                    │
+               (Gate) ── 3.3V
+
+Common GND: ESP32 GND ── LED Strip GND
 ```
 
 ### How It Works
 
-1. **ESP32 HIGH (3.3V):**
-   - MOSFET turns ON
-   - Drain pulls to ~0V through source
-   - Then 10kΩ pulls drain to 5V
-   - Output = 5V ✓
+The BSS138 is wired as a **bidirectional** open-drain level shifter.
+The Gate is tied to the LOW voltage rail (3.3V).
 
-2. **ESP32 LOW (0V):**
-   - MOSFET turns OFF
-   - Source at 0V
-   - Drain at 0V
-   - Output = 0V ✓
+1. **ESP32 drives LOW (0V):**
+   - Source goes to 0V
+   - VGS = 3.3V - 0V = 3.3V > Vth → MOSFET turns ON
+   - Drain pulled LOW through MOSFET
+   - Output = 0V (LOW) ✓
+
+2. **ESP32 drives HIGH (3.3V):**
+   - Source at 3.3V
+   - VGS = 3.3V - 3.3V = 0V → MOSFET turns OFF
+   - Drain pulled to 5V by 10kΩ pull-up
+   - Output = 5V (HIGH) ✓
+
+**Non-inverting!** LOW→LOW, HIGH→HIGH (with voltage translation)
 
 ### Pros and Cons
 
@@ -766,18 +798,18 @@ GPIO2 ────[470Ω]───┬──────────── DI
 **Wiring:**
 ```
 5V PSU:
-  (+) ──┬─── 74HCT125 Pin 14 (VCC)
+  (+) ──┬─── 74HCT125 Pin 14 (VCC) — MUST be 5V!
         ├─── LED strip 5V
         └─── [1000µF cap] ─── GND
 
 ESP32:
-  GPIO2 ──[470Ω]─── 74HCT125 Pin 1 (1A)
+  GPIO2 ──[470Ω]─── 74HCT125 Pin 2 (1A)  — Data input
   GND ──────────┬── 74HCT125 Pin 7 (GND)
-                ├── 74HCT125 Pin 2 (1OE)
+                ├── 74HCT125 Pin 1 (1/OE) — Enable output
                 └── LED strip GND
 
 74HCT125:
-  Pin 3 (1Y) ────── LED strip DI
+  Pin 3 (1Y) ────── LED strip DI           — Data output (5V level)
 
 Capacitors:
   [0.1µF] between 74HCT125 Pin 14 and Pin 7
@@ -793,17 +825,17 @@ Capacitors:
 
 **Wiring:**
 ```
-ESP32 → 74HCT125:
-  GPIO2  ──[470Ω]── Pin 1 (1A) → Pin 3 (1Y) → Strip 1 DI
-  GPIO4  ──[470Ω]── Pin 4 (2A) → Pin 6 (2Y) → Strip 2 DI
-  GPIO16 ──[470Ω]── Pin 8 (3A) → Pin 9 (3Y) → Strip 3 DI
-  GPIO17 ──[470Ω]── Pin 11 (4A) → Pin 12 (4Y) → Strip 4 DI
+ESP32 → 74HCT125 (verify against datasheet!):
+  GPIO2  ──[470Ω]── Pin 2  (1A) → Pin 3  (1Y) → Strip 1 DI
+  GPIO4  ──[470Ω]── Pin 5  (2A) → Pin 6  (2Y) → Strip 2 DI
+  GPIO16 ──[470Ω]── Pin 9  (3A) → Pin 8  (3Y) → Strip 3 DI
+  GPIO17 ──[470Ω]── Pin 12 (4A) → Pin 11 (4Y) → Strip 4 DI
 
-Enable all outputs:
-  GND ──── Pins 2, 5, 10, 13 (all OE pins)
+Enable all outputs (/OE pins are active LOW):
+  GND ──── Pins 1, 4, 10, 13 (all /OE pins)
 
 Power:
-  5V ───── Pin 14 (VCC) + all LED strips
+  5V ───── Pin 14 (VCC) — MUST be 5V for level shifting!
   GND ──── Pin 7 (GND) + all LED strips + ESP32
 ```
 
@@ -851,11 +883,12 @@ Second Buffer (near LEDs):
 
 **Best Setup:**
 ```
-ESP32 GPIO → [470Ω] → 74HCT125 input
-74HCT125 output → LED strip DI
-74HCT125 VCC = 5V (with 0.1µF cap)
-74HCT125 OE = GND
-All grounds connected
+ESP32 GPIO → [470Ω] → 74HCT125 Pin 2 (1A input)
+74HCT125 Pin 3 (1Y output) → LED strip DI
+74HCT125 Pin 14 (VCC) = 5V (MUST be 5V! + 0.1µF cap to GND)
+74HCT125 Pin 1 (1/OE) = GND (enables output)
+74HCT125 Pin 7 (GND) = GND
+All grounds connected (ESP32, 74HCT125, LED strip, PSU)
 ```
 
 **Part Numbers to Order:**

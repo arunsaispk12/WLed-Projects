@@ -112,25 +112,31 @@ Control multiple LED strips independently from a single ESP32! This professional
 |-----------|---------|----------|-------|
 | GPIO2 | 1 | LED Data 1 | Primary channel |
 | GPIO4 | 2 | LED Data 2 | |
-| GPIO15 | 3 | LED Data 3 | |
-| GPIO16 | 4 | LED Data 4 | |
+| GPIO16 | 3 | LED Data 3 | |
+| GPIO17 | 4 | LED Data 4 | |
 | GPIO21 | - | I2C SDA | Optional sensors |
 | GPIO22 | - | I2C SCL | Optional sensors |
 | 3.3V | - | Logic Power | Shared |
 | GND | - | Ground | Common ground |
 
+**WARNING:** Do NOT use GPIO6-11 (flash), GPIO12 (boot voltage select),
+or GPIO15 (boot strapping) for LED data outputs.
+
 #### 8-Channel (ESP32-S3)
 
 | ESP32-S3 Pin | Channel | Function |
 |--------------|---------|----------|
-| GPIO2 | 1 | LED Data 1 |
-| GPIO4 | 2 | LED Data 2 |
-| GPIO5 | 3 | LED Data 3 |
-| GPIO6 | 4 | LED Data 4 |
-| GPIO7 | 5 | LED Data 5 |
-| GPIO15 | 6 | LED Data 6 |
-| GPIO16 | 7 | LED Data 7 |
-| GPIO17 | 8 | LED Data 8 |
+| GPIO4 | 1 | LED Data 1 |
+| GPIO5 | 2 | LED Data 2 |
+| GPIO6 | 3 | LED Data 3 |
+| GPIO7 | 4 | LED Data 4 |
+| GPIO15 | 5 | LED Data 5 |
+| GPIO16 | 6 | LED Data 6 |
+| GPIO17 | 7 | LED Data 7 |
+| GPIO18 | 8 | LED Data 8 |
+
+**Note:** ESP32-S3 has different strapping pin behavior than ESP32.
+GPIO15 is safe for general I/O on the S3 variant.
 
 ## System Architecture
 
@@ -152,8 +158,8 @@ Power Supply (5V 60A)
 ESP32
   ├─ GPIO2 ─[470Ω]─[74HCT125]─→ Channel 1 Data
   ├─ GPIO4 ─[470Ω]─[74HCT125]─→ Channel 2 Data
-  ├─ GPIO15─[470Ω]─[74HCT125]─→ Channel 3 Data
-  └─ GPIO16─[470Ω]─[74HCT125]─→ Channel 4 Data
+  ├─ GPIO16─[470Ω]─[74HCT125]─→ Channel 3 Data
+  └─ GPIO17─[470Ω]─[74HCT125]─→ Channel 4 Data
 
 Common GND: PSU, ESP32, All LED Strips
 ```
@@ -182,9 +188,9 @@ ESP32                74HCT125 (Quad)              LED Strips
 │      │            │           │
 │ GPIO4├─[470Ω]────┤A2      Y2 ├────────────────→ Ch2 Data
 │      │            │           │
-│GPIO15├─[470Ω]────┤A3      Y3 ├────────────────→ Ch3 Data
+│GPIO16├─[470Ω]────┤A3      Y3 ├────────────────→ Ch3 Data
 │      │            │           │
-│GPIO16├─[470Ω]────┤A4      Y4 ├────────────────→ Ch4 Data
+│GPIO17├─[470Ω]────┤A4      Y4 ├────────────────→ Ch4 Data
 │      │            │           │
 │  GND ├────────────┤GND        │
 │      │            │           │
@@ -203,7 +209,7 @@ Edit `platformio.ini` before building:
 -D WLED_MAX_BUSSES=4              # 4 for standard, 8 for advanced
 
 # Pin configuration
--D DATA_PINS=2,4,15,16            # Match your wiring
+-D DATA_PINS=2,4,16,17            # Match your wiring
 
 # LED configuration per channel (edit as needed)
 -D LEDPIN1=2
@@ -212,10 +218,10 @@ Edit `platformio.ini` before building:
 -D LEDPIN2=4
 -D LEDCOUNT2=300                  # Channel 2: 300 LEDs
 
--D LEDPIN3=15
+-D LEDPIN3=16
 -D LEDCOUNT3=150                  # Channel 3: 150 LEDs (shorter run)
 
--D LEDPIN4=16
+-D LEDPIN4=17
 -D LEDCOUNT4=150                  # Channel 4: 150 LEDs
 ```
 
@@ -254,7 +260,15 @@ cd projects/wled-controllers/multi-channel-controller
      - Count: 300
      - Type: WS2813
 
-     (etc. for each channel)
+     Output 3:
+     - GPIO: 16
+     - Count: 150
+     - Type: WS2813
+
+     Output 4:
+     - GPIO: 17
+     - Count: 150
+     - Type: WS2813
      ```
 
 3. **Segments** (Main UI → Segments)

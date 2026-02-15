@@ -325,9 +325,11 @@ Main Stairs:
 - GPIO2:  LED Data Output 1
 
 Basement Stairs:
-- GPIO15: PIR Bottom
-- GPIO16: PIR Top
+- GPIO27: PIR Bottom
+- GPIO26: PIR Top
 - GPIO4:  LED Data Output 2
+
+NOTE: Do NOT use GPIO15 — it is a boot strapping pin on ESP32.
 
 Both through separate level shifters
 ```
@@ -341,8 +343,8 @@ Main PIR Bottom ──│ GPIO13  │
 Main PIR Top ─────│ GPIO14  │
 Main LED Data ────│ GPIO2   │→ Level Shifter 1 → Main Stairs LEDs
                   │         │
-Bsmt PIR Bottom ──│ GPIO15  │
-Bsmt PIR Top ─────│ GPIO16  │
+Bsmt PIR Bottom ──│ GPIO27  │
+Bsmt PIR Top ─────│ GPIO26  │
 Bsmt LED Data ────│ GPIO4   │→ Level Shifter 2 → Basement LEDs
                   └─────────┘
 ```

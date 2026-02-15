@@ -1,5 +1,9 @@
 # Hardware Pinout
 
+> **IMPORTANT:** Before modifying this file, review the
+> [Hardware Review Checklist](../../../docs/HARDWARE_REVIEW_CHECKLIST.md).
+> All pin numbers and voltages MUST be verified against manufacturer datasheets.
+
 ## ESP32 Pin Assignments
 
 ### Primary Connections
@@ -34,8 +38,10 @@ For controlling multiple LED strips:
 |-----------|-------|----------|-----------|----------|
 | GPIO2 | 2 | LED Data 1 | Strip 1 | 500 |
 | GPIO4 | 4 | LED Data 2 | Strip 2 | 500 |
-| GPIO15 | 15 | LED Data 3 | Strip 3 | 500 |
-| GPIO16 | 16 | LED Data 4 | Strip 4 | 500 |
+| GPIO16 | 16 | LED Data 3 | Strip 3 | 500 |
+| GPIO17 | 17 | LED Data 4 | Strip 4 | 500 |
+
+**Do NOT use:** GPIO6-11 (flash), GPIO12 (boot), GPIO15 (boot strapping)
 
 ## Power Distribution
 
@@ -139,22 +145,27 @@ ESP32 GPIO2 ──[470Ω]── 74HCT125 Pin 2 (A1)
 | 7 (GND) | Common GND | - |
 | 14 (VCC) | 5V | Power |
 
-### Alternative: MOSFET Level Shifter
+### Alternative: MOSFET Level Shifter (BSS138 Bidirectional)
 
 ```
 Component List:
 - BSS138 N-Channel MOSFET
 - 10kΩ resistors (2x)
 
-Connections:
-ESP32 GPIO2 ──[10kΩ]──┬──── 5V
-                      │
-                   [BSS138]
-                  G   D   S
-                  │   │   │
-                  │   │   └──── GND
-                  │   └──────── LED Data
-                  └───[10kΩ]─── GND
+Connections (bidirectional, non-inverting):
+3.3V ──[10kΩ]──┬────────────────┬──[10kΩ]── 5V
+               │                │
+          (Source)          (Drain)
+               │   ┌───────┐   │
+               └───│S     D│───┘
+                   │ BSS138│
+               ┌───│G      │
+               │   └───────┘
+              3.3V (Gate = LOW voltage rail)
+               │                │
+ESP32 GPIO2 ───┘                └── LED Data
+
+Gate = 3.3V, Source = low-voltage side, Drain = high-voltage side
 ```
 
 ## Testing Points
